@@ -1,0 +1,1 @@
+INT x = 12;  # commentaire
