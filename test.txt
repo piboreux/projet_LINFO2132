@@ -1,0 +1,8 @@
+# ceci est un commentaire
+
+final X = 0032;
+coll MyType
+true && false
+3.14
+.25
+"Hello\nWorld"

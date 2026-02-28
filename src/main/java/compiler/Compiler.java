@@ -33,8 +33,12 @@ public class Compiler {
                 while (true) {
                     symbol = lexer.getNextSymbol();
                     System.out.println(symbol);
-
+                    /*
                     if (symbol.toString().equals("EOF")) {
+                        break;
+                    }
+                    */
+                    if (symbol.getType() == Symbol.TokenType.EOF){
                         break;
                     }
                 }
