@@ -24,6 +24,8 @@ public class Symbol {
         LPAREN, RPAREN, LBRACE, RBRACE, LBRACKET, RBRACKET, // (, ), {, }, [,]
         SEMICOLON, COMMA, DOT, // ;, ., ','
 
+        //for
+        RANGE,
         //End of File
         EOF
     }

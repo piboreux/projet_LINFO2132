@@ -51,7 +51,7 @@
 # Constants must be declared at the top of the source file (if not respected, throw a semantic error). 
 # Constant declarations can use expressions and other constants that 
 # have been declared earlier. Only base types can be used for constants. 
-  
+
 final INT i = 3; 
 final FLOAT j = 3.2*5.0; 
 final INT k = i*3; 

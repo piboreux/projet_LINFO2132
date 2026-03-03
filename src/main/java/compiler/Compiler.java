@@ -48,6 +48,7 @@ public class Compiler {
                 System.exit(1);
             }
 
+
         } else {
             System.out.println("Usage: -lexer <filepath>");
         }

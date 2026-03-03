@@ -85,6 +85,10 @@ public class Lexer {
             case "ARRAY":  return new Symbol(word, Symbol.TokenType.ARRAY);
             case "true":   return new Symbol(word, Symbol.TokenType.BOOLEAN);
             case "false":  return new Symbol(word, Symbol.TokenType.BOOLEAN);
+            case "INT":     return new Symbol(word, Symbol.TokenType.INT);
+            case "FLOAT":   return new Symbol(word, Symbol.TokenType.FLOAT);
+            case "STRING":  return new Symbol(word, Symbol.TokenType.STRING);
+            case "BOOL": return new Symbol(word, Symbol.TokenType.BOOLEAN);
         }
         if(Character.isUpperCase(first))return new Symbol(word,Symbol.TokenType.COLLECTION_NAME);
         return new Symbol(word, Symbol.TokenType.IDENTIFIER);
@@ -95,7 +99,7 @@ public class Lexer {
         boolean IsFloat = false;
         if(currentChar == '.'){
             IsFloat = true;
-            sb.append('0');// .23 e, 0.23
+            sb.append('0');// .23 en 0.23
             sb.append('.');
             advance();
         }
@@ -138,7 +142,7 @@ public class Lexer {
             advance();
         }
         if(currentChar==-1){
-            throw new RuntimeException("Lexical Error: Unterminated string - missing last \" ");
+            throw new RuntimeException("Lexical Error: Unterminated string, missing last \" ");
         }
         advance();
         return new Symbol(sb.toString(), Symbol.TokenType.STRING);
@@ -152,6 +156,10 @@ public class Lexer {
                 return new Symbol("+", Symbol.TokenType.PLUS);
             case '-':
                 advance();
+                if (currentChar == '>') {
+                    advance();
+                    return new Symbol("->", Symbol.TokenType.RANGE);
+                }
                 return new Symbol("-", Symbol.TokenType.MINUS);
             case '*':
                 advance();
@@ -188,6 +196,15 @@ public class Lexer {
                 return new Symbol(",", Symbol.TokenType.COMMA);
             case '.':
                 advance();
+                if (Character.isDigit(currentChar)) {
+                    // float
+                    StringBuilder sb = new StringBuilder("0.");//.24 en 0.24
+                    while (Character.isDigit(currentChar)) {
+                        sb.append((char) currentChar);
+                        advance();
+                    }
+                    return new Symbol(sb.toString(), Symbol.TokenType.FLOAT);
+                }
                 return new Symbol(".", Symbol.TokenType.DOT);
 
             case '='://== or = or =/=
@@ -251,7 +268,7 @@ public class Lexer {
                 return IdenOrKey();
             }
             //Int or Float
-            if (Character.isDigit(currentChar) || currentChar == '.') {
+            if (Character.isDigit(currentChar)) {
                 return Number();
             }
             //String
