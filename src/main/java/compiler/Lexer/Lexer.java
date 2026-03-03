@@ -20,7 +20,7 @@ public class Lexer {
     private void advance() throws IOException {
         currentChar = reader.read(); // -1 si fin de fichier
     }
-
+/*
     private void skipWhitespace() throws IOException {
         while (currentChar == ' ' ||
                currentChar == '\t' ||
@@ -37,6 +37,8 @@ public class Lexer {
             }
         }
     }
+
+    */
 
     private void skipIgnored() throws IOException {
         boolean skipping = true;
@@ -71,7 +73,7 @@ public class Lexer {
             advance();
         }
         String word = sb.toString();
-        // keyword
+
         switch(word){
             case "final":  return new Symbol(word, Symbol.TokenType.FINAL);
             case "coll":   return new Symbol(word, Symbol.TokenType.COLL);
@@ -83,12 +85,12 @@ public class Lexer {
             case "return": return new Symbol(word, Symbol.TokenType.RETURN);
             case "not":    return new Symbol(word, Symbol.TokenType.NOT);
             case "ARRAY":  return new Symbol(word, Symbol.TokenType.ARRAY);
-            case "true":   return new Symbol(word, Symbol.TokenType.BOOLEAN);
-            case "false":  return new Symbol(word, Symbol.TokenType.BOOLEAN);
-            case "INT":     return new Symbol(word, Symbol.TokenType.INT);
-            case "FLOAT":   return new Symbol(word, Symbol.TokenType.FLOAT);
-            case "STRING":  return new Symbol(word, Symbol.TokenType.STRING);
-            case "BOOL": return new Symbol(word, Symbol.TokenType.BOOLEAN);
+            case "BOOL":   return new Symbol(word, Symbol.TokenType.BOOL);
+            case "true":   
+            case "false":  return new Symbol(word, Symbol.TokenType.BOOLEAN_LITERAL);           
+            case "INT":    return new Symbol(word, Symbol.TokenType.INT);
+            case "FLOAT":  return new Symbol(word, Symbol.TokenType.FLOAT);
+            case "STRING": return new Symbol(word, Symbol.TokenType.STRING);
         }
         if(Character.isUpperCase(first))return new Symbol(word,Symbol.TokenType.COLLECTION_NAME);
         return new Symbol(word, Symbol.TokenType.IDENTIFIER);
@@ -229,9 +231,9 @@ public class Lexer {
                     return new Symbol("<=", Symbol.TokenType.LTE);
                 }
                 return new Symbol("<", Symbol.TokenType.LT);
-            case '>': //> or >=
-                advance();
-                if (currentChar == '=') {
+            case '>': // > or >=
+                advance(); // lire le '>'
+                if (currentChar == '=') { // >=
                     advance();
                     return new Symbol(">=", Symbol.TokenType.GTE);
                 }

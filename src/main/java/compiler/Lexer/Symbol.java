@@ -4,29 +4,19 @@ public class Symbol {
 
     //types de tokens
     public enum TokenType {
-        //IDENTIFIER (= names of variables, functions, types)
-        IDENTIFIER,
-        COLLECTION_NAME,//begin with Capital letter
-
-        //keywords
+        // types
+        INT, FLOAT, STRING, BOOL,      
+        // littéraux
+        BOOLEAN_LITERAL,              
+        // mots-clés
         FINAL, COLL, DEF, FOR, WHILE, IF, ELSE, RETURN, NOT, ARRAY,
-        //Base Type
-        INT,FLOAT,STRING,BOOLEAN,
-
-        //OPERATOR
-        PLUS, MINUS, TIMES, DIV, MOD,// +, -, *, /, %
-        ASSIGN,        // =
-        EQ, NEQ,       // ==, =/=
-        LT, GT, LTE, GTE, // <, >, <=, >=
-        AND, OR, // &&, ||
-
-        //rest of symbol
-        LPAREN, RPAREN, LBRACE, RBRACE, LBRACKET, RBRACKET, // (, ), {, }, [,]
-        SEMICOLON, COMMA, DOT, // ;, ., ','
-
-        //for
-        RANGE,
-        //End of File
+        // identifiants
+        IDENTIFIER, COLLECTION_NAME,
+        // opérateurs
+        PLUS, MINUS, TIMES, DIV, MOD, ASSIGN, EQ, NEQ,
+        LT, LTE, GT, GTE, AND, OR, RANGE,
+        LPAREN, RPAREN, LBRACE, RBRACE, LBRACKET, RBRACKET,
+        SEMICOLON, COMMA, DOT,
         EOF
     }
     private final String value;
@@ -48,6 +38,6 @@ public class Symbol {
         if (value == null || value.isEmpty()) {
             return "<" + type + ">";
         }
-        return "<" + type + ", " + value + ">";
+        return "<" + type + ", \"" + value + "\">";
     }
 }
