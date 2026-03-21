@@ -52,7 +52,7 @@
 # Constant declarations can use expressions and other constants that 
 # have been declared earlier. Only base types can be used for constants. 
 
-final INT i = 3; 
+final INT i = 3;
 final FLOAT j = 3.2*5.0; 
 final INT k = i*3; 
 final STRING message = "Hello"; 

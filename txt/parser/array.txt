@@ -1,0 +1,2 @@
+INT[] c  = INT ARRAY [5] ;
+# new ARRAY of length 5
