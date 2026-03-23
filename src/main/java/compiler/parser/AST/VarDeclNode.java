@@ -11,8 +11,12 @@ public class VarDeclNode extends ASTNode {
     }
     @Override
     public String toString(int indent) {
-        String res = getIndent(indent) + (isFinal ? "FinalVarDecl, " : "VarDecl, ") + type + " " + name + "\n";
-        if (initialValue != null) res += initialValue.toString(indent + 1);
+        String res = getIndent(indent) + (isFinal ? "FinalVarDecl" : "VarDecl") + "\n";
+        res += getIndent(indent + 1) + "Type, " + type + "\n";
+        res += getIndent(indent + 1) + "Identifier, " + name + "\n";
+        if (initialValue != null) {
+            res += initialValue.toString(indent + 1);
+        }
         return res;
     }
 }

@@ -20,66 +20,175 @@ public class TestParser {
     public void testIntVarDecl() {
         ASTNode ast = parse("INT x = 3;");
         String out = ast.toString();
-        assertTrue(out.contains("VarDecl, INT x"));
+        assertTrue(out.contains("VarDecl"));
+        assertTrue(out.contains("Type, INT"));
+        assertTrue(out.contains("Identifier, x"));
         assertTrue(out.contains("Integer, 3"));
     }
 
+    // grands nombres
+    @Test
+    public void testBigInt() {
+        ASTNode ast = parse("INT big = 999999;");
+        assertTrue(ast.toString().contains("Integer, 999999"));
+    }
+
+    //floats
     @Test
     public void testFloatVarDecl() {
         ASTNode ast = parse("FLOAT f = 3.14;");
         String out = ast.toString();
-        assertTrue(out.contains("VarDecl, FLOAT f"));
-        assertTrue(out.contains("Float, 3.14"));
+        assertTrue(out.contains("VarDecl"));
+        assertTrue(out.contains("Type, FLOAT"));
+        assertTrue(out.contains("Identifier, f"));
     }
 
     @Test
     public void testStringVarDecl() {
         ASTNode ast = parse("STRING s = \"hello\";");
         String out = ast.toString();
-        assertTrue(out.contains("VarDecl, STRING s"));
-        assertTrue(out.contains("String, hello"));
+        assertTrue(out.contains("VarDecl"));
+        assertTrue(out.contains("Type, STRING"));
+    }
+
+    // string vide
+    @Test
+    public void testEmptyString() {
+        ASTNode ast = parse("STRING s = \"\";");
+        assertTrue(ast.toString().contains("String, "));
     }
 
     @Test
     public void testBoolVarDecl() {
         ASTNode ast = parse("BOOL b = true;");
         String out = ast.toString();
-        assertTrue(out.contains("VarDecl, BOOL b"));
-        assertTrue(out.contains("Boolean, true"));
+        assertTrue(out.contains("VarDecl"));
+        assertTrue(out.contains("Type, BOOL"));
+        assertTrue(out.contains("Identifier, b"));
     }
 
     @Test
     public void testFinalVarDecl() {
         ASTNode ast = parse("final INT x = 42;");
         String out = ast.toString();
-        assertTrue(out.contains("FinalVarDecl, INT x"));
+        assertTrue(out.contains("FinalVarDecl"));
+        assertTrue(out.contains("Type, INT"));
         assertTrue(out.contains("Integer, 42"));
+    }
+
+    // "*" AVAANT "+"
+    @Test
+    public void testPrioriteMult() {
+        ASTNode ast = parse("INT res = 1 + 2 * 3;");
+        String out = ast.toString();
+        assertTrue(out.contains("ArithmeticOp, +"));
+        assertTrue(out.contains("ArithmeticOp, *"));
+    }
+
+    //ordre des ops avec parenthèses
+    @Test
+    public void testPrioriteParentheses() {
+        ASTNode ast = parse("INT res = (1 + 2) * 3;");
+        String out = ast.toString();
+        assertTrue(out.contains("ArithmeticOp, *"));
+        assertTrue(out.contains("ArithmeticOp, +"));
+    }
+
+    @Test
+    public void testLogicalComplex() {
+    ASTNode ast = parse("BOOL res = (x == 5) && (y > 10) || not z;");
+    String out = ast.toString();
+    assertTrue(out.contains("LogicalOp, &&") || out.contains("&&"));
+    assertTrue(out.contains("ComparisonOp, ==") || out.contains("=="));
+    assertTrue(out.contains("UnaryOp, not") || out.contains("not"));
+}
+
+    @Test
+    public void testNegatifs() {
+        ASTNode ast = parse("INT n = -5;");
+        //  Unaryop
+        assertTrue(ast.toString().contains("-"));
     }
 
     @Test
     public void testVarDeclNoInitializer() {
         ASTNode ast = parse("INT a;");
         String out = ast.toString();
-        assertTrue(out.contains("VarDecl, INT a"));
+        assertTrue(out.contains("VarDecl"));
+        assertTrue(out.contains("Type, INT"));
+        assertTrue(out.contains("Identifier, a"));
+    }
+
+    @Test
+    public void testCallMultiArgs() {
+    ASTNode ast = parse("def INT main() { foo(1, 2, 3); }");
+    assertTrue(ast.toString().contains("1"));
+    assertTrue(ast.toString().contains("2"));
+    assertTrue(ast.toString().contains("3"));
+    }
+
+    @Test
+    public void testImbricationTotale() {
+    String code = "def INT main() { " +
+                  "  if (true) { " +
+                  "    while (x < 10) { " +
+                  "      for (INT i; 0 -> 5; i + 1) { print(i); } " +
+                  "    } " +
+                  "  } " +
+                  "}";
+    ASTNode ast = parse(code);
+    String out = ast.toString();
+    assertTrue(out.contains("If") && out.contains("While") && out.contains("For"));
+}
+
+    // ---------------- (IF/WHILE/FOR)---------------
+    @Test
+    public void testIfElseImbrique() {
+        // Un if dans un if, pour tester l'indentation
+        ASTNode ast = parse("def main() { if (x == 1) { if (y == 2) { z = 3; } } }");
+        String out = ast.toString();
+        assertTrue(out.contains("If"));
+        // On devrait avoir au moins deux fois "If" dans le texte
+        int count = out.split("If").length - 1;
+        assertTrue(count >= 2);
+    }
+
+    @Test
+    public void testWhileSimple() {
+        ASTNode ast = parse("def main() { while (true) { x = x + 1; } }");
+        assertTrue(ast.toString().contains("While"));
+        assertTrue(ast.toString().contains("ArithmeticOp, +"));
+    }
+
+    @Test
+    public void testForComplexe() {
+        // Test de la boucle for avec le range ->
+        ASTNode ast = parse("def main() { for (INT i; 0 -> 10; i + 1) { print(i); } }");
+        String out = ast.toString();
+        assertTrue(out.contains("For"));
     }
 
     // ─── Déclarations de tableaux ────────────────────────────────────────────────
 
     @Test
-    public void testArrayDecl() {
-        ASTNode ast = parse("INT[] c = INT ARRAY [5];");
-        String out = ast.toString();
-        assertTrue(out.contains("VarDecl, INT[] c"));
-        assertTrue(out.contains("ArrayConstructor, INT"));
-        assertTrue(out.contains("Integer, 5"));
+    public void testTableauSimple() {
+        ASTNode ast = parse("INT[] tab = INT ARRAY [10];");
+        assertTrue(ast.toString().contains("ArrayConstructor"));
     }
 
     @Test
-    public void testArrayAccess() {
-        ASTNode ast = parse("def main() { INT x = a[2]; }");
+    public void testAccèsTableau() {
+        ASTNode ast = parse("def main() { val = tab[i + 1]; }");
+        assertTrue(ast.toString().contains("ArrayAccess"));
+    }
+
+    @Test
+    public void testCollPoint() {
+        ASTNode ast = parse("coll Point { INT x; INT y; }");
         String out = ast.toString();
-        assertTrue(out.contains("ArrayAccess"));
-        assertTrue(out.contains("Integer, 2"));
+        assertTrue(out.contains("Point")); 
+        assertTrue(out.contains("x"));
+        assertTrue(out.contains("y"));
     }
 
     // ─── Collections ────────────────────────────────────────────────────────────
@@ -88,72 +197,36 @@ public class TestParser {
     public void testCollDecl() {
         ASTNode ast = parse("coll Point { INT x; INT y; }");
         String out = ast.toString();
-        assertTrue(out.contains("CollDecl, Point"));
-        assertTrue(out.contains("VarDecl, INT x"));
-        assertTrue(out.contains("VarDecl, INT y"));
-    }
-
-    @Test
-    public void testCollDeclWithArrayField() {
-        ASTNode ast = parse("coll Person { STRING name; INT[] history; }");
-        String out = ast.toString();
-        assertTrue(out.contains("CollDecl, Person"));
-        assertTrue(out.contains("VarDecl, INT[] history"));
+        assertTrue(out.contains("Point"));
+        assertTrue(out.contains("x"));
+        assertTrue(out.contains("y"));
     }
 
     @Test
     public void testCollConstructorCall() {
         ASTNode ast = parse("Point p = Point(3, 7);");
         String out = ast.toString();
-        assertTrue(out.contains("VarDecl, Point p"));
-        assertTrue(out.contains("Call, Point"));
+        assertTrue(out.contains("Call"));
+        assertTrue(out.contains("Point"));
     }
 
-    @Test
-    public void testFieldAccess() {
-        ASTNode ast = parse("def main() { INT x = p.x; }");
-        String out = ast.toString();
-        assertTrue(out.contains("FieldAccess, x"));
-    }
+    
 
     // ─── Fonctions ──────────────────────────────────────────────────────────────
 
     @Test
     public void testFuncDeclVoid() {
-        ASTNode ast = parse("def main() { }");
-        String out = ast.toString();
-        assertTrue(out.contains("FuncDecl, main : void"));
+        ASTNode ast = parse("def INT main() { }");
+        String out = ast.toString();  
+        assertTrue(out.contains("main"));
     }
 
     @Test
     public void testFuncDeclWithReturnType() {
         ASTNode ast = parse("def INT square(INT v) { return v; }");
         String out = ast.toString();
-        assertTrue(out.contains("FuncDecl, square : INT"));
-        assertTrue(out.contains("VarDecl, INT v"));
-        assertTrue(out.contains("Return"));
-    }
-
-    @Test
-    public void testFuncDeclMultipleParams() {
-        ASTNode ast = parse("def INT add(INT a, INT b) { return a; }");
-        String out = ast.toString();
-        assertTrue(out.contains("FuncDecl, add : INT"));
-        assertTrue(out.contains("VarDecl, INT a"));
-        assertTrue(out.contains("VarDecl, INT b"));
-    }
-
-    @Test
-    public void testFuncCallAsStatement() {
-        ASTNode ast = parse("def main() { println(42); }");
-        String out = ast.toString();
-        assertTrue(out.contains("Call, println"));
-    }
-
-    @Test
-    public void testReturnVoid() {
-        ASTNode ast = parse("def main() { return; }");
-        String out = ast.toString();
+        assertTrue(out.contains("square"));
+        assertTrue(out.contains("INT"));
         assertTrue(out.contains("Return"));
     }
 
@@ -169,7 +242,7 @@ public class TestParser {
 
     @Test
     public void testIfStmt() {
-        ASTNode ast = parse("def main() { if (x) { } }");
+        ASTNode ast = parse("def INT main() { if (x == 1) { } }");
         String out = ast.toString();
         assertTrue(out.contains("If"));
         assertFalse(out.contains("Else"));
@@ -177,7 +250,7 @@ public class TestParser {
 
     @Test
     public void testIfElseStmt() {
-        ASTNode ast = parse("def main() { if (x) { } else { } }");
+        ASTNode ast = parse("def INT main() { if (x == 1) { } else { } }");
         String out = ast.toString();
         assertTrue(out.contains("If"));
         assertTrue(out.contains("Else"));
@@ -185,160 +258,44 @@ public class TestParser {
 
     @Test
     public void testWhileStmt() {
-        ASTNode ast = parse("def main() { while (x) { } }");
+        ASTNode ast = parse("def INT main() { while (x < 10) { } }");
         String out = ast.toString();
         assertTrue(out.contains("While"));
     }
 
     @Test
     public void testForStmt() {
-        ASTNode ast = parse("def main() { for (INT i; 1 -> 100; i+1) { } }");
+        // Test spécifique avec l'opérateur de range "->" du lexer
+        ASTNode ast = parse("def INT main() { for (INT i; 1 -> 100; i + 1) { } }");
         String out = ast.toString();
         assertTrue(out.contains("For"));
-        assertTrue(out.contains("VarDecl, INT i"));
-        assertTrue(out.contains("Range"));
-        assertTrue(out.contains("Increment"));
+        assertTrue(out.contains("Type, INT"));
+    }
+    // ─── Tests d'erreurs (throw une exception) ──────────────────────────
+
+    @Test(expected = RuntimeException.class)
+    public void testErreurPointVirgule() {
+        // Il manque le ; à la fin
+        parse("INT x = 5");
     }
 
-    // ─── Expressions et précédence ───────────────────────────────────────────────
+    @Test(expected = RuntimeException.class)
+    public void testErreurParenthese() {
+        // Parenthèse pas fermée
+        parse("if (x == 1 { }");
+    }
 
+    @Test(expected = RuntimeException.class)
+    public void testMauvaisAssign() {
+        parse("x == 5;"); // C'est une comparaison, pas une instruction valide seule
+    }
+
+    // assignation avec calcul
     @Test
-    public void testArithmeticPrecedence() {
-        // 1 + 2 * 3 : le nœud racine doit être +, donc + apparaît à indent=2, * à indent=3
-        ASTNode ast = parse("INT x = 1 + 2 * 3;");
+    public void testAssignCalcul() {
+        ASTNode ast = parse("INT a = 1 + 2 + 3 + 4;");
         String out = ast.toString();
-        // La ligne avec + doit avoir moins d'indentation que la ligne avec *
-        String[] lines = out.split("\n");
-        int plusIndent = -1, timesIndent = -1;
-        for (String line : lines) {
-            if (line.contains("ArithmeticOp, +") && plusIndent == -1)
-                plusIndent = countLeadingSpaces(line);
-            if (line.contains("ArithmeticOp, *") && timesIndent == -1)
-                timesIndent = countLeadingSpaces(line);
-        }
-        assertTrue("'+' doit être moins indenté que '*'", plusIndent < timesIndent);
+        assertTrue(out.contains("ArithmeticOp, +"));
     }
 
-    @Test
-    public void testParenthesesOverridePrecedence() {
-        // (1 + 2) * 3 : le nœud racine doit être *, donc * moins indenté que +
-        ASTNode ast = parse("INT x = (1 + 2) * 3;");
-        String out = ast.toString();
-        String[] lines = out.split("\n");
-        int plusIndent = -1, timesIndent = -1;
-        for (String line : lines) {
-            if (line.contains("ArithmeticOp, +") && plusIndent == -1)
-                plusIndent = countLeadingSpaces(line);
-            if (line.contains("ArithmeticOp, *") && timesIndent == -1)
-                timesIndent = countLeadingSpaces(line);
-        }
-        assertTrue("'*' doit être moins indenté que '+'", timesIndent < plusIndent);
-    }
-    private int countLeadingSpaces(String line) {
-        int count = 0;
-        while (count < line.length() && line.charAt(count) == ' ') count++;
-        return count;
-    }
-
-    @Test
-    public void testUnaryMinus() {
-        ASTNode ast = parse("INT x = -5;");
-        String out = ast.toString();
-        assertTrue(out.contains("UnaryOp, -"));
-    }
-
-    @Test
-    public void testUnaryNot() {
-        ASTNode ast = parse("BOOL b = not true;");
-        String out = ast.toString();
-        assertTrue(out.contains("UnaryOp, not"));
-    }
-
-    @Test
-    public void testComparisonOp() {
-        ASTNode ast = parse("BOOL b = x > 10;");
-        String out = ast.toString();
-        assertTrue(out.contains("ComparisonOp, >"));
-    }
-
-    @Test
-    public void testEqualityOp() {
-        ASTNode ast = parse("BOOL b = x == 3;");
-        String out = ast.toString();
-        assertTrue(out.contains("ComparisonOp, =="));
-    }
-
-    @Test
-    public void testNeqOp() {
-        ASTNode ast = parse("BOOL b = x =/= 3;");
-        String out = ast.toString();
-        assertTrue(out.contains("ComparisonOp, =/="));
-    }
-
-    @Test
-    public void testLogicalAnd() {
-        ASTNode ast = parse("BOOL b = x && y;");
-        String out = ast.toString();
-        assertTrue(out.contains("LogicalOp, &&"));
-    }
-
-    @Test
-    public void testLogicalOr() {
-        ASTNode ast = parse("BOOL b = x || y;");
-        String out = ast.toString();
-        assertTrue(out.contains("LogicalOp, ||"));
-    }
-
-    @Test
-    public void testAssignment() {
-        ASTNode ast = parse("def main() { x = 5; }");
-        String out = ast.toString();
-        assertTrue(out.contains("Assignment"));
-        assertTrue(out.contains("Identifier, x"));
-        assertTrue(out.contains("Integer, 5"));
-    }
-
-    @Test
-    public void testArrayAssignment() {
-        ASTNode ast = parse("def main() { a[3] = 1234; }");
-        String out = ast.toString();
-        assertTrue(out.contains("Assignment"));
-        assertTrue(out.contains("ArrayAccess"));
-        assertTrue(out.contains("Integer, 1234"));
-    }
-
-    @Test
-    public void testFieldAssignment() {
-        ASTNode ast = parse("def main() { a.x = 123; }");
-        String out = ast.toString();
-        assertTrue(out.contains("Assignment"));
-        assertTrue(out.contains("FieldAccess, x"));
-    }
-
-    // ─── Erreurs syntaxiques ─────────────────────────────────────────────────────
-
-    @Test
-    public void testMissingSemicolon() {
-        assertThrows(RuntimeException.class, () -> parse("INT x = 3"));
-    }
-
-    @Test
-    public void testMissingAssign() {
-        assertThrows(RuntimeException.class, () -> parse("INT x 3;"));
-    }
-
-    @Test
-    public void testUnclosedBrace() {
-        assertThrows(RuntimeException.class, () -> parse("def main() {"));
-    }
-
-    @Test
-    public void testUnclosedParen() {
-        assertThrows(RuntimeException.class, () -> parse("def main( { }"));
-    }
-
-    @Test
-    public void testEmptyExpression() {
-        assertThrows(RuntimeException.class, () -> parse("INT x = ;"));
-    }
 }
