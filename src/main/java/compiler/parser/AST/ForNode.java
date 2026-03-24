@@ -1,10 +1,10 @@
 package compiler.parser.AST;
 
 public class ForNode extends ASTNode {
-    private final VarDeclNode iterator;
+    private final ASTNode iterator;
     private final ASTNode start, end, increment, body;
 
-    public ForNode(VarDeclNode iter, ASTNode s, ASTNode e, ASTNode inc, ASTNode b) {
+    public ForNode(ASTNode iter, ASTNode s, ASTNode e, ASTNode inc, ASTNode b) {
         this.iterator = iter; this.start = s; this.end = e; this.increment = inc; this.body = b;
     }
 

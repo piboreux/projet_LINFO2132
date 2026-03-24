@@ -277,10 +277,23 @@ public class Parser {
         consume(Symbol.TokenType.FOR);
         consume(Symbol.TokenType.LPAREN);
 
-        String typeName = currentSymbol.getValue();
-        consume(peek());
-        String varName = currentSymbol.getValue();
-        consume(Symbol.TokenType.IDENTIFIER);
+        ASTNode iterator;
+
+        // On regarde si le premier token est un TYPE (INT, FLOAT, etc.)
+        if (isTypeToken()) {
+            // CAS 1 : Déclaration (ex: INT i)
+            String typeName = currentSymbol.getValue();
+            consume(peek()); // Consomme le type
+            String varName = currentSymbol.getValue();
+            consume(Symbol.TokenType.IDENTIFIER);
+            iterator = new VarDeclNode(typeName, varName, false, null);
+        } else {
+            // CAS 2 : Variable déjà déclarée (ex: i)
+            String varName = currentSymbol.getValue();
+            consume(Symbol.TokenType.IDENTIFIER);
+            // On crée un IdentifierNode simple au lieu d'une VarDecl
+            iterator = new IdentifierNode(varName);
+        }
         consume(Symbol.TokenType.SEMICOLON);
 
         // Range
@@ -293,7 +306,7 @@ public class Parser {
         ASTNode increment = parseExpression();
         consume(Symbol.TokenType.RPAREN);
 
-        VarDeclNode iterator = new VarDeclNode(typeName, varName, false, null);
+        
         return new ForNode(iterator, start, end, increment, parseBlock());
     }
 

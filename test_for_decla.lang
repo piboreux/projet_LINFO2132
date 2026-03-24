@@ -1,0 +1,6 @@
+def main() {
+  INT i;
+  for (i; 1 -> 100; i + 1) { 
+     print(i); 
+  }
+}
