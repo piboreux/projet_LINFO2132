@@ -6,6 +6,9 @@ public class ArrayAccessNode extends ASTNode {
     public ArrayAccessNode(ASTNode array, ASTNode index) {
         this.array = array; this.index = index;
     }
+    public ASTNode getArray() { return array; }
+    public ASTNode getIndex() { return index; }
+
     @Override
     public String toString(int indent) {
         return getIndent(indent) + "ArrayAccess\n" +

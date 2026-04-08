@@ -9,6 +9,10 @@ public class FuncDeclNode extends ASTNode {
     public FuncDeclNode(String name, String ret, List<VarDeclNode> p, ASTNode b) {
         this.name = name; this.returnType = ret; this.params = p; this.body = b;
     }
+    public String getName() { return name; }
+    public String getReturnType() { return returnType; }
+    public List<VarDeclNode> getParameters() { return params; }
+    public ASTNode getBody() { return body; }
     @Override
     public String toString(int indent) {
         StringBuilder sb = new StringBuilder(getIndent(indent) + "FuncDecl, " + name + " : " + returnType + "\n");

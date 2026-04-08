@@ -9,6 +9,9 @@ public class ArrayConstructorNode extends ASTNode {
         this.size = size;
     }
 
+    public String getElementType() { return elementType; }
+    public ASTNode getSize() { return size; }
+
     @Override
     public String toString(int indent) {
         return getIndent(indent) + "ArrayConstructor, " + elementType + "\n"

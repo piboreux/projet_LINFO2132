@@ -8,6 +8,8 @@ public class IntLiteralNode extends ASTNode {
         this.value = value;
     }
 
+    public String getValue() { return value; }
+
     @Override
     public String toString(int indent) {
         return getIndent(indent) + "Integer, " + value + "\n";

@@ -7,6 +7,8 @@ public class CollDeclNode extends ASTNode {
     public CollDeclNode(String name, List<VarDeclNode> fields) {
         this.name = name; this.fields = fields;
     }
+    public String getName() { return name; }
+    public List<VarDeclNode> getFields() { return fields; }
     @Override
     public String toString(int indent) {
         StringBuilder sb = new StringBuilder(getIndent(indent) + "CollDecl, " + name + "\n");

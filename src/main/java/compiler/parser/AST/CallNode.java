@@ -7,6 +7,8 @@ public class CallNode extends ASTNode {
     public CallNode(String name, List<ASTNode> arguments) {
         this.name = name; this.arguments = arguments;
     }
+    public String getName() { return name; }
+    public List<ASTNode> getArguments() { return arguments; }
     @Override
     public String toString(int indent) {
         StringBuilder sb = new StringBuilder(getIndent(indent) + "Call, " + name + "\n");

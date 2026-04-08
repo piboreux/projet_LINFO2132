@@ -5,6 +5,11 @@ public class IfNode extends ASTNode {
     public IfNode(ASTNode cond, ASTNode thenB, ASTNode elseB) {
         this.condition = cond; this.thenBlock = thenB; this.elseBlock = elseB;
     }
+
+    public ASTNode getCondition() { return condition; }
+    public ASTNode getThenBranch() { return thenBlock; }
+    public ASTNode getElseBranch() { return elseBlock; }
+
     @Override
     public String toString(int indent) {
         String res = getIndent(indent) + "If\n" + condition.toString(indent + 1) + thenBlock.toString(indent + 1);

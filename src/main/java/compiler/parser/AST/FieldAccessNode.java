@@ -6,6 +6,10 @@ public class FieldAccessNode extends ASTNode {
     public FieldAccessNode(ASTNode object, String field) {
         this.object = object; this.field = field;
     }
+
+    public ASTNode getObject() { return object; }
+    public String getField() { return field; }
+
     @Override
     public String toString(int indent) {
         return getIndent(indent) + "FieldAccess, " + field + "\n" + object.toString(indent + 1);

@@ -6,6 +6,10 @@ public class UnaryOpNode extends ASTNode {
     public UnaryOpNode(String op, ASTNode expression) {
         this.op = op; this.expression = expression;
     }
+
+    public String getOperator() { return op; }
+    public ASTNode getOperand() { return expression; }
+
     @Override
     public String toString(int indent) {
         return getIndent(indent) + "UnaryOp, " + op + "\n" + expression.toString(indent + 1);

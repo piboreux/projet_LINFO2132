@@ -3,6 +3,9 @@ package compiler.parser.AST;
 public class ReturnNode extends ASTNode {
     private final ASTNode expression;
     public ReturnNode(ASTNode expr) { this.expression = expr; }
+
+    public ASTNode getValue() { return expression; }
+
     @Override
     public String toString(int indent) {
         String res = getIndent(indent) + "Return\n";

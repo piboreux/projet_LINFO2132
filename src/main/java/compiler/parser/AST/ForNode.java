@@ -8,6 +8,15 @@ public class ForNode extends ASTNode {
         this.iterator = iter; this.start = s; this.end = e; this.increment = inc; this.body = b;
     }
 
+    public VarDeclNode getLoopVar() { return iterator; }
+    public ASTNode getStart() { return start; }
+    public ASTNode getEnd() { return end; }
+    public ASTNode getIncrement() { return increment; }
+    public ASTNode getBody() { return body; }
+    public ASTNode getCondition() {
+        return null;
+    }
+
     @Override
     public String toString(int indent) {
         return getIndent(indent) + "For\n"

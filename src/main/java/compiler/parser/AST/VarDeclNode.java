@@ -9,6 +9,12 @@ public class VarDeclNode extends ASTNode {
     public VarDeclNode(String type, String name, boolean isFinal, ASTNode initialValue) {
         this.type = type; this.name = name; this.isFinal = isFinal; this.initialValue = initialValue;
     }
+
+    public String getType() { return type; }
+    public String getName() { return name; }
+    public boolean isFinal() { return isFinal; }
+    public ASTNode getInitializer() { return initialValue; }
+
     @Override
     public String toString(int indent) {
         String res = getIndent(indent) + (isFinal ? "FinalVarDecl" : "VarDecl") + "\n";

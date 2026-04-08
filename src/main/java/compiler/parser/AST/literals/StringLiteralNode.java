@@ -4,6 +4,7 @@ import compiler.parser.AST.ASTNode;
 public class StringLiteralNode extends ASTNode {
     private final String value;
     public StringLiteralNode(String value) { this.value = value; }
+    public String getValue() { return value; }
     @Override
     public String toString(int indent) {
         return getIndent(indent) + "String, " + value + "\n";
