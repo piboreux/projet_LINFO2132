@@ -15,7 +15,9 @@ package compiler;
 import compiler.Lexer.Lexer;
 import compiler.Lexer.Symbol;
 import compiler.parser.AST.ASTNode;
+import compiler.parser.AST.ProgramNode;
 import compiler.parser.Parser;
+import compiler.Semantic_Analysis.Semantic_Analysis;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -65,8 +67,31 @@ public class Compiler {
                 System.exit(1);
             }
         }
+        else if (args.length >= 2 && args[0].equals("-semantic")) {
+            try {
+                FileReader reader = new FileReader(args[1]);
+                Lexer lexer = new Lexer(reader);
+                Parser parser = new Parser(lexer);
+                ASTNode root = parser.getAST();
+
+                if (root instanceof ProgramNode program) {
+                    Semantic_Analysis analyzer = new Semantic_Analysis();
+                    analyzer.analyze(program);
+                    System.out.println("Semantic analysis completed successfully!");
+                } else {
+                    System.err.println("Error: Root is not a ProgramNode");
+                    System.exit(1);
+                }
+            } catch (IOException e) {
+                System.err.println("Error: " + e.getMessage());
+                System.exit(1);
+            } catch (RuntimeException e) {
+                System.err.println("Semantic Error: " + e.getMessage());
+                System.exit(2);
+            }
+        }
         else {
-            System.out.println("Usage: -lexer <filepath>");
+            System.out.println("Usage: -lexer <filepath> | -parser <filepath> | -semantic <filepath>");
         }
     }
 }

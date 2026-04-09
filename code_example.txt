@@ -53,7 +53,7 @@
 # have been declared earlier. Only base types can be used for constants. 
 
 final INT i = 3;
-final FLOAT j = 3.2*5.0; 
+final FLOAT j = 3.2*5.0;
 final INT k = i*3; 
 final STRING message = "Hello"; 
 final BOOL isEmpty  = true; 
@@ -72,7 +72,7 @@ coll Person {
 # Global variables are initialised in the order in which they appear. 
 # Variables do not always have an initialiser. 
 # Initialiser can be an expression. 
-INT a = 3; 
+INT a = 3;
 # For ARRAYs, only one-dimensional ARRAYs are required (higher order ARRAY programming can be implemented as an extra feature). 
 # To initialise ARRAY or collection variables, they must be assigned to an existing collection or ARRAY, or a new ARRAY or collection must be created. 
 INT[] c  = INT ARRAY [5] ;  # new ARRAY of length 5 
@@ -134,16 +134,16 @@ def Point copyPoints(Point[] p) {
                              
 def main() { 
     INT value = read_INT();
-    println(square(value)); 
-    for (INT i; 1 -> 100; i+1) { 
+    println(square(value));
+    for (INT i; 1 -> 100; i+1) {
         while (value=/=3) { 
             if (i > 10){ 
                 # .... 
             } else { 
                 # .... 
             } 
-        } 
+        }
     } 
 
-    i = (i+2)*2; 
+    i = (i+2)*2;
 } 
