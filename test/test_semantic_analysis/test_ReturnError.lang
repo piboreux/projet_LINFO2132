@@ -1,0 +1,4 @@
+
+def INT calcul() {
+    return true; # Retourne bool et pas INT
+}

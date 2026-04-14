@@ -1,0 +1,8 @@
+def INT addition(INT a, INT b) {
+    return a + b;
+}
+
+def INT main() {
+    INT res = addition(1, 2, 3);
+    return res;
+}

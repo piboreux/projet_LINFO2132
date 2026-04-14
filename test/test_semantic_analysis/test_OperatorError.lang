@@ -1,0 +1,7 @@
+def INT main() {
+    INT x = 10;
+    FLOAT y = 5.5;
+    #INT + FLOAT --> erreur
+    FLOAT z = x + y;
+    return 0;
+}

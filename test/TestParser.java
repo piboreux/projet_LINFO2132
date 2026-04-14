@@ -287,7 +287,7 @@ public class TestParser {
 
     @Test(expected = RuntimeException.class)
     public void testMauvaisAssign() {
-        parse("x == 5;"); // C'est une comparaison, pas une instruction valide seule
+        parse("x == 5;"); // comparaison, pas une instruction valide seule
     }
 
     // assignation avec calcul

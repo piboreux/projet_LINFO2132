@@ -122,12 +122,16 @@ public class Semantic_Analysis {
         currentFunctionReturnType = node.getReturnType();
         symbolTable.enterScope();
         for (VarDeclNode p : node.getParameters()) {
-            if (!symbolTable.isValidType(p.getType())) semanticError("TypeError", "Unknown type '" + p.getType() + "' for parameter '" + p.getName() + "'");
+            if (!symbolTable.isValidType(p.getType())) {
+                semanticError("TypeError", "Unknown type '" + p.getType() + "' for parameter '" + p.getName() + "'");
+            }
             symbolTable.declare(p.getName(), new SymbolInfo(p.getType(), false));
         }
         ASTNode body = node.getBody();
         if (body instanceof BlockNode block) {
-            for (ASTNode statement : block.getChildren()) analyzeStatement(statement);
+            for (ASTNode statement : block.getChildren()) {
+                analyzeStatement(statement);
+            }
         } else {
             analyzeStatement(body);
         }
@@ -226,28 +230,32 @@ public class Semantic_Analysis {
     private void analyzeFor(ForNode node) {
         symbolTable.enterScope();
         ASTNode loopVar = node.getLoopVar();
+        String varType = "";
+
         if (loopVar instanceof VarDeclNode varDecl) {
             analyzeVarDeclaration(varDecl);
+            varType = varDecl.getType();
         } else if (loopVar instanceof IdentifierNode idNode) {
-            symbolTable.lookup(idNode.getName());
+            varType = symbolTable.lookup(idNode.getName()).type;
         }
+        if (!isNumeric(varType)) {
+            semanticError("TypeError", "Loop variable must be numeric, got '" + varType + "'");
+        }
+
         if (node.getStart() != null) {
             String startType = getType(node.getStart());
-            if (!isNumeric(startType))
-                semanticError("TypeError", "For loop start must be numeric, got '" + startType + "'");
+            if (!isNumeric(startType)) semanticError("TypeError", "For loop start must be numeric");
         }
         if (node.getEnd() != null) {
             String endType = getType(node.getEnd());
-            if (!isNumeric(endType)) semanticError("TypeError", "For loop end must be numeric, got '" + endType + "'");
+            if (!isNumeric(endType)) semanticError("TypeError", "For loop end must be numeric");
         }
-        if (node.getIncrement() != null) {
-            String incrType = getType(node.getIncrement());
-            if (!isNumeric(incrType)) semanticError("TypeError", "For loop increment must be numeric, got '" + incrType + "'");
-        }
+ 
         ASTNode body = node.getBody();
         if (body instanceof BlockNode block)
             for (ASTNode s : block.getChildren()) analyzeStatement(s);
         else analyzeStatement(body);
+        
         symbolTable.exitScope();
     }
     private void analyzeReturn(ReturnNode node) {
@@ -339,32 +347,57 @@ public class Semantic_Analysis {
     }
     private String analyzeCallExpr(CallNode node) {
         String name = node.getName();
+        List<ASTNode> args = node.getArguments();
+
         if (Character.isUpperCase(name.charAt(0))) {
-            if (!symbolTable.isCollectionType(name))
+            if (!symbolTable.isCollectionType(name)) {
                 semanticError("ArgumentError", "Unknown collection '" + name + "'");
-            List<String>  expectedTypes = symbolTable.getCollectionFieldTypes(name);
-            List<ASTNode> args          = node.getArguments();
-            if (args.size() != expectedTypes.size()) semanticError("ArgumentError", "Constructor of '" + name + "' expects " + expectedTypes.size() + " argument(s), got " + args.size());
+            }
+            
+            List<String> expectedTypes = symbolTable.getCollectionFieldTypes(name);
+            
+            if (args.size() != expectedTypes.size()) {
+                semanticError("ArgumentError", "Constructor of '" + name + "' expects " + expectedTypes.size() + " argument(s), got " + args.size());
+            }
+            
             for (int i = 0; i < args.size(); i++) {
                 String argType = getType(args.get(i));
-                if (!typesCompatible(expectedTypes.get(i), argType)) semanticError("ArgumentError", "Argument " + (i + 1) + " of constructor '" + name + "' expects '" + expectedTypes.get(i) + "', got '" + argType + "'");
+                if (!typesCompatible(expectedTypes.get(i), argType)) {
+                    semanticError("ArgumentError", "Argument " + (i + 1) + " of constructor '" + name + "' expects '" + expectedTypes.get(i) + "', got '" + argType + "'");
+                }
             }
-            return name;
+            return name; 
         }
+
+       
         SymbolInfo info = symbolTable.lookup(name);
-        if (!info.isFunction) semanticError("ArgumentError", "'" + name + "' is not a function");
-        List<ASTNode> args     = node.getArguments();
-        List<String>  expected = info.paramTypes;
+        if (!info.isFunction) {
+            semanticError("ArgumentError", "'" + name + "' is not a function");
+        }
+
+        List<String> expected = info.paramTypes;
+
+        // "ANY" pour print"
         if (!expected.isEmpty() && expected.get(0).equals("ANY")) {
-            if (args.size() != 1 && !(name.equals("print") || name.equals("println"))) {semanticError("ArgumentError", "Function '" + name + "' expects 1 argument, got " + args.size());
+            // print/println/length --> 1 arg.
+            if (args.size() != 1) {
+                semanticError("ArgumentError", "Function '" + name + "' expects exactly 1 argument, got " + args.size());
             }
-        } else {
-            if (args.size() != expected.size()) semanticError("ArgumentError", "Function '" + name + "' expects " + expected.size() + " argument(s), got " + args.size());
+            getType(args.get(0)); 
+        } 
+        else {
+            if (args.size() != expected.size()) {
+                semanticError("ArgumentError", "Function '" + name + "' expects " + expected.size() + " argument(s), got " + args.size());
+            }
+            
             for (int i = 0; i < args.size(); i++) {
                 String argType = getType(args.get(i));
-                if (!typesCompatible(expected.get(i), argType)) semanticError("ArgumentError", "Argument " + (i + 1) + " of '" + name + "' expects '" + expected.get(i) + "', got '" + argType + "'");
+                if (!typesCompatible(expected.get(i), argType)) {
+                    semanticError("ArgumentError", "Argument " + (i + 1) + " of '" + name + "' expects '" + expected.get(i) + "', got '" + argType + "'");
+                }
             }
         }
+
         return info.returnType != null ? info.returnType : "void";
     }
     //helper
@@ -372,6 +405,7 @@ public class Semantic_Analysis {
         return type.equals("INT") || type.equals("FLOAT");
     }
     private boolean typesCompatible(String expected, String actual) {
+        if ("ANY".equals(expected)) return true;
         return expected.equals(actual);
     }
     //exception

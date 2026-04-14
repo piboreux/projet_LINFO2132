@@ -1,0 +1,6 @@
+# Mot-clé attendu : MissingConditionError
+def main() {
+    if (10 + 5) { 
+        print("Erreur");
+    }
+}
