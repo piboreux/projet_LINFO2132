@@ -3,7 +3,6 @@ coll Point {
     INT y;
 }
 
-# Erreur sémantique : Déjà défini !
 coll Point {
     INT z;
 }

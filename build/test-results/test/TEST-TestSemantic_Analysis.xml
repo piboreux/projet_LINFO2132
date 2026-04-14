@@ -1,10 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="TestSemantic_Analysis" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-04-14T12:54:55" hostname="pj-Prestige-15-A12UD" time="0.002">
+<testsuite name="TestSemantic_Analysis" tests="7" skipped="0" failures="0" errors="0" timestamp="2026-04-14T16:00:07" hostname="pj-Prestige-15-A12UD" time="0.072">
   <properties/>
-  <testcase name="testValidFloatVarDeclaration" classname="TestSemantic_Analysis" time="0.001"/>
-  <testcase name="testBasicValidDeclaration" classname="TestSemantic_Analysis" time="0.0"/>
-  <testcase name="testBasicTypeError" classname="TestSemantic_Analysis" time="0.001"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[[TypeError] Cannot assign value of type 'FLOAT' to variable 'x' of type 'INT'
+  <testcase name="testOperatorError" classname="TestSemantic_Analysis" time="0.011"/>
+  <testcase name="testScopeError" classname="TestSemantic_Analysis" time="0.01"/>
+  <testcase name="testMissingConditionError" classname="TestSemantic_Analysis" time="0.003"/>
+  <testcase name="testCollectionError" classname="TestSemantic_Analysis" time="0.002"/>
+  <testcase name="testTypeError" classname="TestSemantic_Analysis" time="0.004"/>
+  <testcase name="testArgumentError" classname="TestSemantic_Analysis" time="0.037"/>
+  <testcase name="testReturnError" classname="TestSemantic_Analysis" time="0.002"/>
+  <system-out><![CDATA[--- Exécution du test : OperatorError ---
+]]></system-out>
+  <system-err><![CDATA[[OperatorError] Operator '+' requires same numeric type on both sides, got 'INT' and 'FLOAT'
+[ScopeError] 'x' is used but not declared
+[MissingConditionError] Condition of 'if' must be BOOL, got 'INT'
+[CollectionError] Collection 'P' is already defined
+[TypeError] Cannot assign value of type 'STRING' to variable 'x' of type 'INT'
+[ArgumentError] Function 'add' expects 1 argument(s), got 2
+[ReturnError] Function must return 'INT' but returns 'BOOL'
 ]]></system-err>
 </testsuite>
