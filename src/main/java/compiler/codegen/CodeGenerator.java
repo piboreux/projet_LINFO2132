@@ -205,7 +205,7 @@ public class CodeGenerator {
         localSlots.put(vd.getName(), slot);
         localTypes.put(vd.getName(), vd.getType());
         if (vd.getInitializer() != null) {
-            genExpr(vd.getInitializer(), vd.getType());
+            genExprAs(vd.getInitializer(), vd.getType());
         } else {
             genDefault(vd.getType());
         }
@@ -322,7 +322,7 @@ public class CodeGenerator {
         if (rn.getValue() == null) {
             mv.visitInsn(RETURN);
         } else {
-            genExpr(rn.getValue(), currentReturnType);
+            genExprAs(rn.getValue(), currentReturnType);
             mv.visitInsn(retOp(currentReturnType));
         }
     }
@@ -836,6 +836,15 @@ public class CodeGenerator {
         out.getParentFile().mkdirs();
         try (FileOutputStream fos = new FileOutputStream(out)) {
             fos.write(bytes);
+        }
+    }
+
+    private void genExprAs(ASTNode node, String expectedType) {
+        String actualType = inferType(node);
+        genExpr(node, expectedType);
+
+        if ("FLOAT".equals(expectedType) && "INT".equals(actualType)) {
+            mv.visitInsn(I2F);
         }
     }
 }

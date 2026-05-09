@@ -75,8 +75,11 @@ public class Compiler {
             } catch (IOException e) {
                 System.err.println("Error reading file: " + e.getMessage());
                 System.exit(1);
+            } catch (Semantic_Analysis.SemanticException e) {
+                System.err.println(e.getMessage());
+                System.exit(2);
             } catch (Exception e) {
-                System.err.println("Other Error: " + e.getMessage());
+                System.err.println(e.getMessage());
                 System.exit(1);
             }
 
@@ -114,7 +117,7 @@ public class Compiler {
                 System.err.println("Error reading file: " + e.getMessage());
                 System.exit(1);
             } catch (Exception e) {
-                System.err.println("Other Error: " + e.getMessage());
+                System.err.println(e.getMessage());
                 System.exit(1);
             }
         } else {

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="TestCodeGenerator" tests="8" skipped="0" failures="0" errors="0" timestamp="2026-05-09T23:13:33" hostname="pj-Prestige-15-A12UD" time="2.119">
+  <properties/>
+  <testcase name="testHello" classname="TestCodeGenerator" time="0.298"/>
+  <testcase name="testVoidFunction" classname="TestCodeGenerator" time="0.274"/>
+  <testcase name="testIntToFloatPromotionInReturn" classname="TestCodeGenerator" time="0.219"/>
+  <testcase name="testCollections" classname="TestCodeGenerator" time="0.32"/>
+  <testcase name="testArrays" classname="TestCodeGenerator" time="0.302"/>
+  <testcase name="testScopes" classname="TestCodeGenerator" time="0.272"/>
+  <testcase name="testFunctionReturn" classname="TestCodeGenerator" time="0.29"/>
+  <testcase name="testFloatAndBool" classname="TestCodeGenerator" time="0.134"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

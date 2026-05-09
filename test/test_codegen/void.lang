@@ -1,0 +1,7 @@
+def say() {
+ println("ok");
+}
+
+def main() {
+ say();
+}

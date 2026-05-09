@@ -406,6 +406,7 @@ public class Semantic_Analysis {
     }
     private boolean typesCompatible(String expected, String actual) {
         if ("ANY".equals(expected)) return true;
+        if (expected.equals("FLOAT") && actual.equals("INT")) return true; // Promotion !
         return expected.equals(actual);
     }
     //exception
@@ -418,7 +419,6 @@ public class Semantic_Analysis {
         public String getKeyword() { return keyword; }
     }
     private static void semanticError(String keyword, String message) {
-        System.err.println("[" + keyword + "] " + message);
         throw new SemanticException(keyword, message);
     }
 }

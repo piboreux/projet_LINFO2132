@@ -1,0 +1,14 @@
+coll Point {
+ INT x;
+ INT y;
+}
+
+def printPoint(Point p) {
+ println(p.x);
+ println(p.y);
+}
+
+def main() {
+ Point p = Point(1, 2);
+ printPoint(p);
+}

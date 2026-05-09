@@ -1,0 +1,13 @@
+def FLOAT add(FLOAT a, FLOAT b) {
+ return a + b;
+}
+
+def main() {
+ println(add(1.5, 2.5));
+
+ if (2.0 < 3.0 && true) {
+  println("ok");
+ } else {
+  println("bad");
+ }
+}

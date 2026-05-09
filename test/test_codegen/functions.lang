@@ -1,0 +1,12 @@
+def INT add(INT a, INT b) {
+ return a + b;
+}
+
+def FLOAT toFloat() {
+ return 2;
+}
+
+def main() {
+ println(add(20, 22));
+ println(toFloat());
+}

@@ -1,0 +1,14 @@
+def main() {
+ INT[] ti = INT ARRAY [3];
+ ti[0] = 42;
+
+ FLOAT[] tf = FLOAT ARRAY [2];
+ tf[0] = 3.5;
+
+ BOOL[] tb = BOOL ARRAY [2];
+ tb[0] = true;
+
+ println(ti[0]);
+ println(tf[0]);
+ println(tb[0]);
+}
