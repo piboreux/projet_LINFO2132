@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="TestCodeGeneration" tests="6" skipped="0" failures="0" errors="0" timestamp="2026-05-09T17:17:23" hostname="louis-X555LAB" time="0.053">
+  <properties/>
+  <testcase name="testProgramWithIf" classname="TestCodeGeneration" time="0.039"/>
+  <testcase name="testSimpleProgram" classname="TestCodeGeneration" time="0.002"/>
+  <testcase name="testProgramWithFor" classname="TestCodeGeneration" time="0.003"/>
+  <testcase name="testProgramWithWhile" classname="TestCodeGeneration" time="0.003"/>
+  <testcase name="testProgramWithFunction" classname="TestCodeGeneration" time="0.002"/>
+  <testcase name="testProgramWithVariable" classname="TestCodeGeneration" time="0.002"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

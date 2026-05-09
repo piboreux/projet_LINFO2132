@@ -3,17 +3,17 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 <meta http-equiv="x-ua-compatible" content="IE=edge"/>
-<title>Test results - Class TestSemantic_Analysis</title>
+<title>Test results - Class TestLexer</title>
 <link href="../css/base-style.css" rel="stylesheet" type="text/css"/>
 <link href="../css/style.css" rel="stylesheet" type="text/css"/>
 <script src="../js/report.js" type="text/javascript"></script>
 </head>
 <body>
 <div id="content">
-<h1>Class TestSemantic_Analysis</h1>
+<h1>Class TestLexer</h1>
 <div class="breadcrumbs">
 <a href="../index.html">all</a> &gt; 
-<a href="../packages/default-package.html">default-package</a> &gt; TestSemantic_Analysis</div>
+<a href="../packages/default-package.html">default-package</a> &gt; TestLexer</div>
 <div id="summary">
 <table>
 <tr>
@@ -23,7 +23,7 @@
 <tr>
 <td>
 <div class="infoBox" id="tests">
-<div class="counter">7</div>
+<div class="counter">10</div>
 <p>tests</p>
 </div>
 </td>
@@ -41,7 +41,7 @@
 </td>
 <td>
 <div class="infoBox" id="duration">
-<div class="counter">0.024s</div>
+<div class="counter">0.019s</div>
 <p>duration</p>
 </div>
 </td>
@@ -64,7 +64,7 @@
 <a href="#tab0">Tests</a>
 </li>
 <li>
-<a href="#tab1">Standard error</a>
+<a href="#tab1">Standard output</a>
 </li>
 </ul>
 <div id="tab0" class="tab">
@@ -78,52 +78,61 @@
 </tr>
 </thead>
 <tr>
-<td class="success">testArgumentError</td>
+<td class="success">testBooleanLiterals</td>
+<td class="success">0.001s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testCollectionName</td>
+<td class="success">0.001s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testComment</td>
+<td class="success">0s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testFloatLeadingDot</td>
+<td class="success">0.001s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testInvalidCharacter</td>
+<td class="success">0.003s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testLeadingZeros</td>
+<td class="success">0s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testRangeOperator</td>
+<td class="success">0s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testSequence</td>
 <td class="success">0.013s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
-<td class="success">testCollectionError</td>
-<td class="success">0.001s</td>
+<td class="success">testStringEscapes</td>
+<td class="success">0s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
-<td class="success">testMissingConditionError</td>
-<td class="success">0.001s</td>
-<td class="success">passed</td>
-</tr>
-<tr>
-<td class="success">testOperatorError</td>
-<td class="success">0.002s</td>
-<td class="success">passed</td>
-</tr>
-<tr>
-<td class="success">testReturnError</td>
-<td class="success">0.001s</td>
-<td class="success">passed</td>
-</tr>
-<tr>
-<td class="success">testScopeError</td>
-<td class="success">0.005s</td>
-<td class="success">passed</td>
-</tr>
-<tr>
-<td class="success">testTypeError</td>
-<td class="success">0.001s</td>
+<td class="success">testUnterminatedString</td>
+<td class="success">0s</td>
 <td class="success">passed</td>
 </tr>
 </table>
 </div>
 <div id="tab1" class="tab">
-<h2>Standard error</h2>
+<h2>Standard output</h2>
 <span class="code">
-<pre>[OperatorError] Operator '+' requires same numeric type on both sides, got 'INT' and 'FLOAT'
-[ScopeError] 'x' is used but not declared
-[MissingConditionError] Condition of 'if' must be BOOL, got 'INT'
-[CollectionError] Collection 'P' is already defined
-[TypeError] Cannot assign value of type 'STRING' to variable 'x' of type 'INT'
-[ArgumentError] Function 'add' expects 1 argument(s), got 2
-[ReturnError] Function must return 'INT' but returns 'BOOL'
+<pre>&lt;DEF, &quot;def&quot;&gt;
 </pre>
 </span>
 </div>
