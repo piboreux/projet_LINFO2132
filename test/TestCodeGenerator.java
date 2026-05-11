@@ -119,4 +119,17 @@ public class TestCodeGenerator {
 
         assertEquals("2.0", compileAndRun(code));
     }
+
+    @Test
+    public void testBuiltins() throws Exception {
+        String code =
+                "def main() {" +
+                " println(str(42));" +
+                " println(floor(3.8));" +
+                " println(ceil(3.2));" +
+                " println(length(\"hello\"));" +
+                "}";
+
+        assertEquals("42\n3\n4\n5", compileAndRun(code));
+    }
 }

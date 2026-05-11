@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="TestCodeGenerator" tests="8" skipped="0" failures="0" errors="0" timestamp="2026-05-09T23:13:33" hostname="pj-Prestige-15-A12UD" time="2.119">
+<testsuite name="TestCodeGenerator" tests="9" skipped="0" failures="0" errors="0" timestamp="2026-05-11T14:19:00" hostname="pj-Prestige-15-A12UD" time="2.66">
   <properties/>
-  <testcase name="testHello" classname="TestCodeGenerator" time="0.298"/>
-  <testcase name="testVoidFunction" classname="TestCodeGenerator" time="0.274"/>
-  <testcase name="testIntToFloatPromotionInReturn" classname="TestCodeGenerator" time="0.219"/>
-  <testcase name="testCollections" classname="TestCodeGenerator" time="0.32"/>
-  <testcase name="testArrays" classname="TestCodeGenerator" time="0.302"/>
-  <testcase name="testScopes" classname="TestCodeGenerator" time="0.272"/>
-  <testcase name="testFunctionReturn" classname="TestCodeGenerator" time="0.29"/>
-  <testcase name="testFloatAndBool" classname="TestCodeGenerator" time="0.134"/>
+  <testcase name="testHello" classname="TestCodeGenerator" time="0.408"/>
+  <testcase name="testVoidFunction" classname="TestCodeGenerator" time="0.287"/>
+  <testcase name="testBuiltins" classname="TestCodeGenerator" time="0.278"/>
+  <testcase name="testIntToFloatPromotionInReturn" classname="TestCodeGenerator" time="0.295"/>
+  <testcase name="testCollections" classname="TestCodeGenerator" time="0.254"/>
+  <testcase name="testArrays" classname="TestCodeGenerator" time="0.285"/>
+  <testcase name="testScopes" classname="TestCodeGenerator" time="0.279"/>
+  <testcase name="testFunctionReturn" classname="TestCodeGenerator" time="0.277"/>
+  <testcase name="testFloatAndBool" classname="TestCodeGenerator" time="0.288"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>
