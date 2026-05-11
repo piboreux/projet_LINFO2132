@@ -309,22 +309,47 @@ public class Semantic_Analysis {
         String right = getType(node.getRight());
         String op    = node.getOperator();
         switch (op) {
-            case "+", "-", "*", "/", "%" -> {
-                if (!isNumeric(left) || !isNumeric(right)) semanticError("OperatorError", "Operator '" + op + "' requires numeric types, got '" + left + "' and '" + right + "'");
-                if (!left.equals(right)) semanticError("OperatorError", "Operator '" + op + "' requires same numeric type on both sides, got '" + left + "' and '" + right + "'");
+            case "+" -> {
+                if (left.equals("STRING") || right.equals("STRING")) {
+                    return "STRING";
+                }
+                if (!isNumeric(left) || !isNumeric(right)) {
+                    semanticError("OperatorError", "Operator '" + op + "' requires numeric types or STRING concatenation, got '" + left + "' and '" + right + "'");
+                }
+                if (!left.equals(right)) {
+                    semanticError("OperatorError", "Operator '" + op + "' requires same numeric type on both sides, got '" + left + "' and '" + right + "'");
+                }
+                return left;
+            }
+
+            case "-", "*", "/", "%" -> {
+                if (!isNumeric(left) || !isNumeric(right)) {
+                    semanticError("OperatorError", "Operator '" + op + "' requires numeric types, got '" + left + "' and '" + right + "'");
+                }
+                if (!left.equals(right)) {
+                    semanticError("OperatorError", "Operator '" + op + "' requires same numeric type on both sides, got '" + left + "' and '" + right + "'");
+                }
                 return left;
             }
             case "<", ">", "<=", ">=" -> {
-                if (!isNumeric(left) || !isNumeric(right)) semanticError("OperatorError", "Operator '" + op + "' requires numeric types, got '" + left + "' and '" + right + "'");
-                if (!left.equals(right)) semanticError("OperatorError", "Operator '" + op + "' requires same numeric type on both sides, got '" + left + "' and '" + right + "'");
+                if (!isNumeric(left) || !isNumeric(right)) {
+                    semanticError("OperatorError", "Operator '" + op + "' requires numeric types, got '" + left + "' and '" + right + "'");
+                }
+                if (!left.equals(right)) {
+                    semanticError("OperatorError", "Operator '" + op + "' requires same numeric type on both sides, got '" + left + "' and '" + right + "'");
+                }
                 return "BOOL";
             }
             case "==", "=/=" -> {
-                if (!left.equals(right)) semanticError("OperatorError", "Operator '" + op + "' requires same types, got '" + left + "' and '" + right + "'");
+                if (!left.equals(right)) {
+                    semanticError("OperatorError", "Operator '" + op + "' requires same types, got '" + left + "' and '" + right + "'");
+                }
                 return "BOOL";
             }
             case "&&", "||" -> {
-                if (!left.equals("BOOL") || !right.equals("BOOL")) semanticError("OperatorError", "Operator '" + op + "' requires BOOL operands, got '" + left + "' and '" + right + "'");
+                if (!left.equals("BOOL") || !right.equals("BOOL")) {
+                    semanticError("OperatorError", "Operator '" + op + "' requires BOOL operands, got '" + left + "' and '" + right + "'");
+                }
                 return "BOOL";
             }
             default -> throw new RuntimeException("OperatorError: Unknown binary operator '" + op + "'");

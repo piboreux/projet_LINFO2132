@@ -384,18 +384,36 @@ public class CodeGenerator {
         String ltype  = inferType(bin.getLeft());
         switch (op) {
             case "+" -> {
-                if (ltype.equals("STRING")) {
+                String rtype = inferType(bin.getRight());
+
+                if (ltype.equals("STRING") || rtype.equals("STRING")) {
                     mv.visitTypeInsn(NEW, "java/lang/StringBuilder");
                     mv.visitInsn(DUP);
-                    mv.visitMethodInsn(INVOKESPECIAL, "java/lang/StringBuilder", "<init>", "()V", false);
-                    genExpr(bin.getLeft(),  "STRING");
-                    mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/StringBuilder", "append",
-                            "(Ljava/lang/String;)Ljava/lang/StringBuilder;", false);
-                    genExpr(bin.getRight(), "STRING");
-                    mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/StringBuilder", "append",
-                            "(Ljava/lang/String;)Ljava/lang/StringBuilder;", false);
-                    mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/StringBuilder", "toString",
-                            "()Ljava/lang/String;", false);
+                    mv.visitMethodInsn(INVOKESPECIAL,
+                            "java/lang/StringBuilder",
+                            "<init>",
+                            "()V",
+                            false);
+
+                    genExpr(bin.getLeft(), ltype);
+                    mv.visitMethodInsn(INVOKEVIRTUAL,
+                            "java/lang/StringBuilder",
+                            "append",
+                            stringAppendDesc(ltype),
+                            false);
+
+                    genExpr(bin.getRight(), rtype);
+                    mv.visitMethodInsn(INVOKEVIRTUAL,
+                            "java/lang/StringBuilder",
+                            "append",
+                            stringAppendDesc(rtype),
+                            false);
+
+                    mv.visitMethodInsn(INVOKEVIRTUAL,
+                            "java/lang/StringBuilder",
+                            "toString",
+                            "()Ljava/lang/String;",
+                            false);
                 } else {
                     genArith(bin, ltype, IADD, FADD);
                 }
@@ -724,6 +742,17 @@ public class CodeGenerator {
             case "BOOL"   -> "(Z)V";
             case "STRING" -> "(Ljava/lang/String;)V";
             default       -> "(Ljava/lang/Object;)V";
+        };
+    }
+
+
+    private String stringAppendDesc(String type) {
+        return switch (type) {
+            case "INT"    -> "(I)Ljava/lang/StringBuilder;";
+            case "FLOAT"  -> "(F)Ljava/lang/StringBuilder;";
+            case "BOOL"   -> "(Z)Ljava/lang/StringBuilder;";
+            case "STRING" -> "(Ljava/lang/String;)Ljava/lang/StringBuilder;";
+            default       -> "(Ljava/lang/Object;)Ljava/lang/StringBuilder;";
         };
     }
 
