@@ -131,19 +131,22 @@ def INT square(INT v) {
 def Point copyPoints(Point[] p) { 
     return Point(p[0].x+p[1].x, p[0].y+p[1].y); 
 } 
-                             
-def main() { 
+
+def main() {
     INT value = read_INT();
     println(square(value));
-    for (INT i; 1 -> 100; i+1) {
-        while (value=/=3) { 
-            if (i > 10){ 
-                # .... 
-            } else { 
-                # .... 
-            } 
+
+    INT i;
+
+    for (i; 1 -> 100; i+1) {
+        while (value =/= 3) {
+            if (i > 10) {
+                # ....
+            } else {
+                # ....
+            }
         }
-    } 
+    }
 
     i = (i+2)*2;
-} 
+}
