@@ -287,10 +287,6 @@ public class CodeGenerator {
         genExpr(fn.getEnd(), varType);
         mv.visitVarInsn(storeOp(varType), endSlot);
 
-        int incSlot = nextSlot++;
-        genExpr(fn.getIncrement(), varType);
-        mv.visitVarInsn(storeOp(varType), incSlot);
-
         Label startL = new Label();
         Label endL   = new Label();
 
@@ -308,10 +304,7 @@ public class CodeGenerator {
 
         genBlock(fn.getBody());
 
-        // i = i + incTmp
-        loadVar(varName, varType);
-        mv.visitVarInsn(loadOp(varType), incSlot);
-        mv.visitInsn(varType.equals("FLOAT") ? FADD : IADD);
+        genExpr(fn.getIncrement(), varType);
         storeVar(varName, varType);
 
         mv.visitJumpInsn(GOTO, startL);
