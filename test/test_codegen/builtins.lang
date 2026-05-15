@@ -1,6 +1,9 @@
 def main() {
- println(str(42));
- println(floor(3.8));
- println(ceil(3.2));
- println(length("hello"));
+    println(str(42));
+    println(floor(3.8));
+    println(ceil(3.2));
+    println(length("hello"));
+    println(abs(-7));
+    println(min(3, 8));
+    println(max(3, 8));
 }

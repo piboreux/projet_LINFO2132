@@ -581,6 +581,23 @@ public class CodeGenerator {
                 mv.visitLabel(e);
                 return;
             }
+            case "abs" -> {
+                genExpr(call.getArguments().get(0), "INT");
+                mv.visitMethodInsn(INVOKESTATIC, "java/lang/Math", "abs", "(I)I", false);
+                return;
+            }
+            case "min" -> {
+                genExpr(call.getArguments().get(0), "INT");
+                genExpr(call.getArguments().get(1), "INT");
+                mv.visitMethodInsn(INVOKESTATIC, "java/lang/Math", "min", "(II)I", false);
+                return;
+            }
+            case "max" -> {
+                genExpr(call.getArguments().get(0), "INT");
+                genExpr(call.getArguments().get(1), "INT");
+                mv.visitMethodInsn(INVOKESTATIC, "java/lang/Math", "max", "(II)I", false);
+                return;
+            }
         }
         if (Character.isUpperCase(name.charAt(0)) && collDefs.containsKey(name)) {
             mv.visitTypeInsn(NEW, name);
@@ -676,6 +693,7 @@ public class CodeGenerator {
             case "str"         -> "STRING";
             case "floor", "ceil", "length" -> "INT";
             case "not"         -> "BOOL";
+            case "abs", "min", "max" -> "INT";
             default -> null;
         };
     }

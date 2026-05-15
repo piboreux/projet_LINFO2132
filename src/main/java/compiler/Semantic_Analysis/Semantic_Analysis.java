@@ -2,7 +2,6 @@ package compiler.Semantic_Analysis;
 import compiler.parser.AST.*;
 import compiler.parser.AST.literals.*;
 import java.util.*;
-import java.util.List;
 public class Semantic_Analysis {
 
     private static class SymbolInfo {
@@ -117,6 +116,11 @@ public class Semantic_Analysis {
 
         // Special function: length (handles both STRING and ARRAY)
         symbolTable.declare("length", new SymbolInfo("INT", List.of("ANY")));
+        
+        // min max and abs
+        symbolTable.declare("abs", new SymbolInfo("INT", List.of("INT")));
+        symbolTable.declare("min", new SymbolInfo("INT", List.of("INT", "INT")));
+        symbolTable.declare("max", new SymbolInfo("INT", List.of("INT", "INT")));
     }
     private void analyzeFunction(FuncDeclNode node) {
         String previousReturnType = currentFunctionReturnType;

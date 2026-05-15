@@ -128,9 +128,12 @@ public class TestCodeGenerator {
                 " println(floor(3.8));" +
                 " println(ceil(3.2));" +
                 " println(length(\"hello\"));" +
+                " println(abs(-7));" +
+                " println(min(3, 8));" +
+                " println(max(3, 8));" +
                 "}";
 
-        assertEquals("42\n3\n4\n5", compileAndRun(code));
+        assertEquals("42\n3\n4\n5\n7\n3\n8", compileAndRun(code));
     }
 
     @Test
