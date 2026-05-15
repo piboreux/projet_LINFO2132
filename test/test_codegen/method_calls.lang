@@ -1,0 +1,23 @@
+def main() {
+    STRING s = "hello";
+    println("String length:");
+    println(s.length());
+
+    INT[] arr = INT ARRAY[4];
+    println("Array length:");
+    println(arr.length());
+
+    FLOAT x = 3.7;
+    println("Floor:");
+    println(x.floor());
+
+    println("Ceil:");
+    println(x.ceil());
+
+    INT n = 42;
+    println("String conversion:");
+    println(n.str() + "!");
+
+    println("Combined:");
+    println("len=" + s.length() + ", arr=" + arr.length() + ", floor=" + x.floor() + ", ceil=" + x.ceil() + ", n=" + n.str());
+}

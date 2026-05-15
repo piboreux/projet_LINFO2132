@@ -2,6 +2,7 @@ package compiler.Semantic_Analysis;
 import compiler.parser.AST.*;
 import compiler.parser.AST.literals.*;
 import java.util.*;
+import java.util.List;
 public class Semantic_Analysis {
 
     private static class SymbolInfo {
@@ -153,6 +154,8 @@ public class Semantic_Analysis {
             analyzeReturn(ret);
         } else if (node instanceof CallNode call) {
             analyzeCallExpr(call);
+        } else if (node instanceof MethodCallNode method) {
+            analyzeMethodCall(method);
         } else if (node instanceof BlockNode block) {
             symbolTable.enterScope();
             for (ASTNode s : block.getChildren()) analyzeStatement(s);
@@ -299,10 +302,51 @@ public class Semantic_Analysis {
             return symbolTable.getFieldType(base, field.getField());
         }
         if (node instanceof MethodCallNode method) {
-            getType(method.getObject());
-            return "void";
+            return analyzeMethodCall(method);
         }
         throw new RuntimeException("TypeError: Cannot determine type of node: " + node.getClass().getSimpleName());
+    }
+    private String analyzeMethodCall(MethodCallNode node) {
+        String objectType = getType(node.getObject());
+        String method = node.getMethod();
+        List<ASTNode> args = node.getArgs();
+
+        switch (method) {
+            case "length" -> {
+                if (args.size() != 0) {
+                    semanticError("ArgumentError", "Method length() expects 0 argument");
+                }
+                if (!objectType.equals("STRING") && !objectType.endsWith("[]")) {
+                    semanticError("TypeError", "length() can only be used on STRING or ARRAY, got '" + objectType + "'");
+                }
+                return "INT";
+            }
+
+            case "floor", "ceil" -> {
+                if (args.size() != 0) {
+                    semanticError("ArgumentError", "Method " + method + "() expects 0 argument");
+                }
+                if (!objectType.equals("FLOAT")) {
+                    semanticError("TypeError", method + "() can only be used on FLOAT, got '" + objectType + "'");
+                }
+                return "INT";
+            }
+
+            case "str" -> {
+                if (args.size() != 0) {
+                    semanticError("ArgumentError", "Method str() expects 0 argument");
+                }
+                if (!objectType.equals("INT")) {
+                    semanticError("TypeError", "str() can only be used on INT, got '" + objectType + "'");
+                }
+                return "STRING";
+            }
+
+            default -> {
+                semanticError("ArgumentError", "Unknown method '" + method + "' for type '" + objectType + "'");
+                return "void";
+            }
+        }
     }
     private String analyzeBinaryOp(BinaryOpNode node) {
         String left  = getType(node.getLeft());

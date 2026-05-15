@@ -195,6 +195,7 @@ public class CodeGenerator {
         else if (node instanceof ForNode      fn)  genFor(fn);
         else if (node instanceof ReturnNode   rn)  genReturn(rn);
         else if (node instanceof CallNode     cn)  genCallStmt(cn);
+        else if (node instanceof MethodCallNode mc) genMethodCallStmt(mc);
         else if (node instanceof BlockNode    bn)  { for (ASTNode s : bn.getChildren()) genStmt(s); }
         else throw new RuntimeException("CodeGen: unknown statement: " + node.getClass().getSimpleName());
     }
@@ -367,6 +368,9 @@ public class CodeGenerator {
             String coll  = inferType(fa.getObject());
             String ftype = collDefs.get(coll).get(fa.getField());
             mv.visitFieldInsn(GETFIELD, coll, fa.getField(), typeDesc(ftype));
+        }
+        else if (node instanceof MethodCallNode mc) {
+            genMethodCall(mc);
         }
         else throw new RuntimeException("CodeGen: unknown expr node: " + node.getClass().getSimpleName());
     }
@@ -642,6 +646,7 @@ public class CodeGenerator {
             return un.getOperator().equals("not") ? "BOOL" : inferType(un.getOperand());
         }
         if (node instanceof CallNode       cn) return inferCallType(cn.getName());
+        if (node instanceof MethodCallNode mc) return inferMethodCallType(mc);
         if (node instanceof ArrayAccessNode aa) {
             String at = inferType(aa.getArray());
             return at.substring(0, at.length() - 2);
@@ -858,6 +863,88 @@ public class CodeGenerator {
         out.getParentFile().mkdirs();
         try (FileOutputStream fos = new FileOutputStream(out)) {
             fos.write(bytes);
+        }
+    }
+
+    private String inferMethodCallType(MethodCallNode mc) {
+        String objectType = inferType(mc.getObject());
+        String method = mc.getMethod();
+
+        return switch (method) {
+            case "length", "floor", "ceil" -> "INT";
+            case "str" -> "STRING";
+            default -> throw new RuntimeException("CodeGen: unknown method '" + method + "' for type '" + objectType + "'");
+        };
+    }
+
+    private void genMethodCallStmt(MethodCallNode mc) {
+        String ret = inferMethodCallType(mc);
+        genMethodCall(mc);
+
+        if (!ret.equals("void") && !ret.isEmpty()) {
+            mv.visitInsn(POP);
+        }
+    }
+
+    private void genMethodCall(MethodCallNode mc) {
+        String objectType = inferType(mc.getObject());
+        String method = mc.getMethod();
+
+        switch (method) {
+            case "length" -> {
+                genExpr(mc.getObject(), objectType);
+
+                if (objectType.equals("STRING")) {
+                    mv.visitMethodInsn(
+                            INVOKEVIRTUAL,
+                            "java/lang/String",
+                            "length",
+                            "()I",
+                            false
+                    );
+                } else {
+                    mv.visitInsn(ARRAYLENGTH);
+                }
+            }
+
+            case "floor" -> {
+                genExpr(mc.getObject(), "FLOAT");
+                mv.visitInsn(F2D);
+                mv.visitMethodInsn(
+                        INVOKESTATIC,
+                        "java/lang/Math",
+                        "floor",
+                        "(D)D",
+                        false
+                );
+                mv.visitInsn(D2I);
+            }
+
+            case "ceil" -> {
+                genExpr(mc.getObject(), "FLOAT");
+                mv.visitInsn(F2D);
+                mv.visitMethodInsn(
+                        INVOKESTATIC,
+                        "java/lang/Math",
+                        "ceil",
+                        "(D)D",
+                        false
+                );
+                mv.visitInsn(D2I);
+            }
+
+            case "str" -> {
+                genExpr(mc.getObject(), "INT");
+                mv.visitMethodInsn(
+                        INVOKESTATIC,
+                        "java/lang/Integer",
+                        "toString",
+                        "(I)Ljava/lang/String;",
+                        false
+                );
+            }
+
+            default -> throw new RuntimeException("CodeGen: unknown method '" + method + "'");
         }
     }
 

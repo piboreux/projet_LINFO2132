@@ -132,4 +132,61 @@ public class TestCodeGenerator {
 
         assertEquals("42\n3\n4\n5", compileAndRun(code));
     }
+
+    @Test
+    public void testMethodCalls() throws Exception {
+        String code =
+                "def main() {" +
+                " STRING s = \"hello\";" +
+                " println(\"String length:\");" +
+                " println(s.length());" +
+
+                " INT[] arr = INT ARRAY [4];" +
+                " println(\"Array length:\");" +
+                " println(arr.length());" +
+
+                " FLOAT x = 3.7;" +
+                " println(\"Floor:\");" +
+                " println(x.floor());" +
+
+                " println(\"Ceil:\");" +
+                " println(x.ceil());" +
+
+                " INT n = 42;" +
+                " println(\"String conversion:\");" +
+                " println(n.str() + \"!\");" +
+
+                " println(\"Combined:\");" +
+                " println(\"len=\" + s.length() + \", arr=\" + arr.length() + \", floor=\" + x.floor() + \", ceil=\" + x.ceil() + \", n=\" + n.str());" +
+                "}";
+
+        assertEquals(
+                "String length:\n" +
+                "5\n" +
+                "Array length:\n" +
+                "4\n" +
+                "Floor:\n" +
+                "3\n" +
+                "Ceil:\n" +
+                "4\n" +
+                "String conversion:\n" +
+                "42!\n" +
+                "Combined:\n" +
+                "len=5, arr=4, floor=3, ceil=4, n=42",
+                compileAndRun(code)
+        );
+    }
+
+    @Test
+    public void testInvalidMethodCall() {
+        String code =
+                "def main() {" +
+                " INT x = 5;" +
+                " println(x.length());" +
+                "}";
+
+        assertThrows(Semantic_Analysis.SemanticException.class, () -> {
+            compileAndRun(code);
+        });
+    }
 }
